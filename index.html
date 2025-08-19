@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>APEX JS Generator Pro</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🚀 Oracle APEX JS Generator Pro</h1>
+      </div>
+
+      <div class="main-layout">
+        <!-- Pannello Generatore -->
+        <div class="generator-panel">
+          <h2 class="panel-title">⚙️ Configurazione</h2>
+
+          <div class="tabs" id="tabsContainer">
+            <button class="tab active" data-tab="ajax-flow">Flusso Ajax</button>
+            <button class="tab" data-tab="ajax-plsql">Ajax PL/SQL</button>
+            <button class="tab" data-tab="setvalue">Set Value</button>
+            <button class="tab" data-tab="getvalue">Get Value</button>
+            <button class="tab" data-tab="wecr">WECR</button>
+            <button class="tab" data-tab="click-sim">Click</button>
+            <button class="tab" data-tab="call-da">Call DA</button>
+            <button class="tab add-tab-btn" data-action="add-tab" style="display: none">+ Nuovo</button>
+          </div>
+
+          <!-- Tab Flusso Ajax -->
+          <div id="ajax-flow" class="tab-content active">
+            <div class="description-section">
+              <div class="description-title">📖 Descrizione - Flusso Ajax</div>
+              <div class="description-text">Genera chiamate AJAX per invocare process server-side in Oracle APEX. Utilizza apex.server.process per inviare dati al server e gestire le risposte.</div>
+            </div>
+
+            <div class="snippet-preview">
+              // Inizializzo lo spinner let spinner = apex.util.showSpinner(); apex.server.process ('PROCESS_NAME', { x01: 'value1', x02: 'value2' }, { dataType: 'json', success: function (pData) { console.log('Success:', pData); } } ).done(function
+              (pData) { console.log('done:', pData); spinner.remove(); } );
+            </div>
+
+            <div class="form-group">
+              <label for="processName">Nome Process:</label>
+              <input type="text" id="processName" value="MY_PROCESS" />
+            </div>
+            <div class="form-group">
+              <label for="ajaxParams">Parametri Ajax:</label>
+              <textarea id="ajaxParams" rows="2">
+x01: apex.item('P1_ITEM').getValue(),
+x02: 'VALORE FISSO'</textarea
+              >
+            </div>
+            <div class="form-group">
+              <label for="successAction">Azione Done:</label>
+              <textarea id="successAction" rows="2">
+apex.message.showPageSuccess('Terminato con successo!');
+apex.region('report').refresh();</textarea
+              >
+            </div>
+          </div>
+
+          <!-- Tab Ajax PL/SQL -->
+          <div id="ajax-plsql" class="tab-content">
+            <div class="description-section">
+              <div class="description-title">📖 Descrizione - Template Ajax PL/SQL</div>
+              <div class="description-text">Template per il codice PL/SQL del process server-side che risponde alle chiamate AJAX.</div>
+            </div>
+
+            <div class="snippet-preview">
+              DECLARE l_param1 VARCHAR2(100); l_result VARCHAR2(4000); BEGIN l_param1 := apex_application.g_x01; -- Logica business apex_json.open_object; apex_json.write('success', true); apex_json.write('data', l_result); apex_json.close_object;
+              END;
+            </div>
+
+            <div class="form-group">
+              <label for="plsqlVars">Variabili:</label>
+              <textarea id="plsqlVars" rows="2">
+l_param1 VARCHAR2(100);
+l_result VARCHAR2(4000);</textarea
+              >
+            </div>
+            <div class="form-group">
+              <label for="plsqlLogic">Logica Business:</label>
+              <textarea id="plsqlLogic" rows="3">
+l_param1 := apex_application.g_x01;
+
+SELECT column_name INTO l_result 
+FROM table_name 
+WHERE condition = l_param1;</textarea
+              >
+            </div>
+          </div>
+
+          <!-- Tab Set Value -->
+          <div id="setvalue" class="tab-content">
+            <div class="description-section">
+              <div class="description-title">📖 Descrizione - Set Value</div>
+              <div class="description-text">Imposta valori negli item di pagina APEX utilizzando l'API JavaScript nativa o jQuery.</div>
+            </div>
+
+            <div class="snippet-preview">// APEX apex.item("P1_ITEM").setValue("new_value"); // jQuery (APEX Shortcut) $s("P1_ITEM", "new_value");</div>
+
+            <div class="form-group">
+              <label for="setItemName">Nome Item:</label>
+              <input type="text" id="setItemName" value="P1_ITEM" />
+            </div>
+            <div class="form-group">
+              <label for="setValue">Valore:</label>
+              <input type="text" id="setValue" value="'new_value'" />
+            </div>
+            <div class="form-group">
+              <label for="setMethod">Metodo:</label>
+              <select id="setMethod">
+                <option value="apex">APEX</option>
+                <option value="jquery">jQuery</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tab Get Value -->
+          <div id="getvalue" class="tab-content">
+            <div class="description-section">
+              <div class="description-title">📖 Descrizione - Get Value</div>
+              <div class="description-text">Recupera valori dagli item di pagina APEX utilizzando l'API JavaScript nativa o jQuery.</div>
+            </div>
+
+            <div class="snippet-preview">// APEX var value = apex.item("P1_ITEM").getValue(); // jQuery (APEX Shortcut) var value = $v("P1_ITEM");</div>
+
+            <div class="form-group">
+              <label for="getItemName">Nome Item:</label>
+              <input type="text" id="getItemName" value="P1_ITEM" />
+            </div>
+            <div class="form-group">
+              <label for="getMethod">Metodo:</label>
+              <select id="getMethod">
+                <option value="apex">APEX</option>
+                <option value="jquery">jQuery</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tab WECR -->
+          <div id="wecr" class="tab-content">
+            <div class="description-section">
+              <div class="description-title">📖 Descrizione - Template WECR</div>
+              <div class="description-text">Chiamata al WhenExitChangedRecord [Plug-In]</div>
+            </div>
+
+            <div class="snippet-preview">
+              // Creare una variabile per ogni colonna necessaria ad effettuare i controlli let idx_col1; let idx_col2; // Necessari per la risposta let tMsg; let tItem; // Elenco delle colonne per cui deve scattare i controlli let itemsRegion1 =
+              ['COLONNA_A', 'COLONNA_B', 'COLONNA_C']; function controlliWECR(region, view, record, itemsChanged) { console.log('controlli WECR', region); if (region === 'REGION1') { //Recupero degli indici dei campi utilizzati nel controlli del
+              WhenExitChangedRecord idx_col1 = view.grid.model.getFieldKey('NOME_COLONNA_1'); idx_col2 = view.grid.model.getFieldKey('NOME_COLONNA_2'); if (WhenExitChangedRecord.fSearchItem(itemsChanged, itemsRegion1)) { // richiamiamo la funzione
+              java per effettuare i controlli della relativa region controlliRegion1(record); } } // return messaggio errore if (tMsg) { // messaggio di errore, campi da evidenziare in rosso return [tMsg, tItem.split(',')]; } else { return ''; } } //
+              funzione java per richiamare i controlli WECR della region1 function controlliRegion1(record) { apex.server.process( 'CTR_WECR_REGION_1', //PL/SQL process name { // parametri di ingresso del plsql x01: record.record[idx_col1], x02:
+              record.record[idx_col2], }, { dataType: 'json', async: false, success: function (pData) { console.log('success'); // parametri di output della procedura PLSQL tMsg = pData.v_t_msg; tItem = pData.v_t_ele_itm; }, } ); }
+            </div>
+          </div>
+
+          <!-- Tab Click -->
+          <div id="click-sim" class="tab-content">
+            <div class="description-section">
+              <div class="description-title">📖 Descrizione - Simula Click</div>
+              <div class="description-text">Simula click programmatici su pulsanti e altri elementi APEX.</div>
+            </div>
+
+            <div class="snippet-preview">// jQuery $('#P1_BUTTON').click();</div>
+
+            <div class="form-group">
+              <label for="clickTarget">Target:</label>
+              <input type="text" id="clickTarget" value="P1_SUBMIT" />
+            </div>
+          </div>
+
+          <!-- Tab Call DA -->
+          <div id="call-da" class="tab-content">
+            <div class="description-section">
+              <div class="description-title">📖 Descrizione - Call Dynamic Action</div>
+              <div class="description-text">Attiva Dynamic Actions programmaticamente utilizzando eventi personalizzati.</div>
+            </div>
+
+            <div class="snippet-preview">// APEX apex.event.trigger(document, 'custom-event', { data: 'value' }); // jQuery $.event.trigger("custom-event");</div>
+
+            <div class="form-group">
+              <label for="daTarget">Target:</label>
+              <input type="text" id="daTarget" value="document" />
+            </div>
+            <div class="form-group">
+              <label for="daEvent">Evento:</label>
+              <input type="text" id="daEvent" value="custom-event" />
+            </div>
+            <div class="form-group">
+              <label for="daMethod">Metodo:</label>
+              <select id="daMethod">
+                <option value="apex">APEX</option>
+                <option value="jquery">jQuery</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn" id="generateBtn">🔧 Genera Codice</button>
+        </div>
+
+        <!-- Pannello Output -->
+        <div class="output-panel">
+          <h2 class="panel-title">
+            📝 Codice Generato
+            <div class="code-toolbar">
+              <button class="toolbar-btn" id="copyBtn">📋 Copia</button>
+              <button class="toolbar-btn test" id="testBtn">🧪 Test</button>
+            </div>
+          </h2>
+
+          <div class="code-output" id="codeOutput">// Oracle APEX JavaScript Generator Pro // Seleziona un tab e clicca "Genera Codice" console.log("APEX JS Generator Pro pronto! 🚀");</div>
+
+          <!-- Sandbox -->
+          <div class="sandbox">
+            <div style="color: #4caf50; font-weight: bold; margin-bottom: 10px">🧪 Sandbox Test Environment</div>
+            <div id="sandboxOutput" class="sandbox-output">Console pronta per il test del codice...</div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <div class="sidebar-section">
+            <div class="sidebar-title">
+              🕒 Cronologia
+              <button id="clearHistoryBtn" class="sidebar-btn">🗑️ Pulisci</button>
+            </div>
+            <div id="historyContainer">
+              <!-- Cronologia dinamica -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal per aggiungere nuovo tab -->
+    <div id="addTabModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close" id="modalClose">&times;</span>
+          ➕ Aggiungi Nuovo Tab/Snippet
+        </div>
+        <div class="modal-form">
+          <div class="form-group">
+            <label>Nome Tab:</label>
+            <input type="text" id="newTabName" placeholder="es. Custom API" />
+          </div>
+          <div class="form-group">
+            <label>ID Tab (senza spazi):</label>
+            <input type="text" id="newTabId" placeholder="es. custom-api" />
+          </div>
+          <div class="form-group">
+            <label>Descrizione:</label>
+            <textarea id="newTabDescription" rows="3" placeholder="Descrizione del tab e del suo utilizzo"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Snippet di Base:</label>
+            <textarea id="newTabSnippet" rows="5" placeholder="// Codice di esempio"></textarea>
+          </div>
+        </div>
+        <div class="modal-buttons">
+          <button class="modal-btn secondary" id="modalCancel">Annulla</button>
+          <button class="modal-btn primary" id="modalConfirm">Aggiungi Tab</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/main.js" type="module"></script>
+  </body>
+</html>
