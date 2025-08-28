@@ -1,4 +1,4 @@
-# 🚀 Oracle APEX JS Generator
+# 🚀 Oracle APEX Generator
 
 Un'applicazione web avanzata progettata per accelerare lo sviluppo in Oracle APEX generando snippet di codice JavaScript e PL/SQL comuni e ripetitivi. Questo strumento fornisce un'interfaccia intuitiva per configurare e creare codice per chiamate AJAX, manipolazione di item, Dynamic Actions e altro ancora, con funzionalità complete di syntax highlighting, formattazione automatica e una sandbox di test integrata.
 
