@@ -175,6 +175,33 @@ $.event.trigger('${event}');`;
   }
 }
 
+function generateCustomMessage() {
+  const type = document.getElementById('daType').value;
+
+  if (type === 'confirm') {
+    return `CustomMessage.show({
+                                icon: 'info/warning/error/success',
+                                title: 'titolo',
+                                message: 'mess',
+                                footer: ''
+                              });`;
+  } else {
+    return `CustomMessage.confirm({
+        icon: 'info/warning/error/success',
+        title: 'titolo',
+        message: 'mess',
+        footer: '',
+      }).then((result) => {
+        if (result) {
+            // utente ha premuto OK
+        }
+        else {
+            // utente ha premuto ANNULLA o X
+        } 
+});`;
+  }
+}
+
 export function generateCode() {
   const activeTab = document.querySelector('.tab-content.active');
   if (!activeTab) return null;
@@ -203,6 +230,9 @@ export function generateCode() {
       break;
     case 'call-da':
       code = generateCallDa();
+      break;
+    case 'custom-message':
+      code = generateCustomMessage();
       break;
     default:
       code = '// Tab personalizzato: ' + tabId;
