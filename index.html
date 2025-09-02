@@ -26,6 +26,7 @@
             <button class="tab" data-tab="wecr">WECR</button>
             <button class="tab" data-tab="click-sim">Click</button>
             <button class="tab" data-tab="call-da">Call DA</button>
+            <button class="tab" data-tab="custom-message">Custom Message</button>
             <button class="tab add-tab-btn" data-action="add-tab" style="display: none">+ Nuovo</button>
           </div>
 
@@ -194,6 +195,22 @@ WHERE condition = l_param1;</textarea
               <select id="daMethod">
                 <option value="apex">APEX</option>
                 <option value="jquery">jQuery</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tab Custom Message -->
+          <div id="custom-message" class="tab-content">
+            <div class="description-section">
+              <div class="description-title">📖 Descrizione - Custom Message da JS</div>
+              <div class="description-text">Attiva i messaggi personalizzati da Javascript</div>
+            </div>
+
+            <div class="form-group">
+              <label for="daType">Tipologia:</label>
+              <select id="daType">
+                <option value="confirm">Conferma</option>
+                <option value="2puls">Due Pulsanti</option>
               </select>
             </div>
           </div>
