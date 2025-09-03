@@ -6,6 +6,11 @@
     <title>APEX Generator</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23f39c12'></rect><text y='.9em' font-size='90'>🚀</text></svg>" />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      .container {
+        max-width: 95%;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -27,6 +32,7 @@
             <button class="tab" data-tab="click-sim">Click</button>
             <button class="tab" data-tab="call-da">Call DA</button>
             <button class="tab" data-tab="custom-message">Custom Message</button>
+            <button class="tab" data-tab="abilitazioni">Abilitazioni</button>
             <button class="tab add-tab-btn" data-action="add-tab" style="display: none">+ Nuovo</button>
           </div>
 
@@ -207,10 +213,31 @@ WHERE condition = l_param1;</textarea
             </div>
 
             <div class="form-group">
-              <label for="daType">Tipologia:</label>
-              <select id="daType">
+              <label for="cmType">Tipologia:</label>
+              <select id="cmType">
                 <option value="confirm">Conferma</option>
                 <option value="2puls">Due Pulsanti</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tab Abilitazioni -->
+          <div id="abilitazioni" class="tab-content">
+            <div class="description-section">
+              <div class="description-title">📖 Descrizione - Abilitazioni</div>
+              <div class="description-text">Gestione abilitazioni complesse</div>
+            </div>
+
+            <div class="form-group">
+              <label for="abiType">Evento:</label>
+              <select id="abiType">
+                <option value="wnfi-bh">WhenNewFormInstance - Before Header</option>
+                <option value="wnfi-pl">WhenNewFormInstance - Page Load</option>
+                <option value="wnri">WhenNewRecordInstance</option>
+                <option value="item">Item - Get Property</option>
+                <option value="region">Region - Get Property</option>
+                <option value="config">Censimento Controllo</option>
+                <option value="debug">Debug - PLSql</option>
               </select>
             </div>
           </div>

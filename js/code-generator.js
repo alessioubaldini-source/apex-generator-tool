@@ -176,7 +176,7 @@ $.event.trigger('${event}');`;
 }
 
 function generateCustomMessage() {
-  const type = document.getElementById('daType').value;
+  const type = document.getElementById('cmType').value;
 
   if (type === 'confirm') {
     return `CustomMessage.show({
@@ -199,6 +199,57 @@ function generateCustomMessage() {
             // utente ha premuto ANNULLA o X
         } 
 });`;
+  }
+}
+
+function generateAbilitazioni() {
+  const type = document.getElementById('abiType').value;
+  switch (type) {
+    case 'wnfi-bh':
+      return `declare
+                  P1_OUT VARCHAR2(1000);
+              begin
+                  KXXXX_ABI_XXXXX.P_WNFI_ABI ( v('APP_PAGE_ID'),
+                                            :P_C_VAR,
+                                            P1_OUT ); -- parametro di output valorizzato nel WNFI
+              
+                  :PXXX_ABI_INS_MASTER := KX003_ABI_UTL_APEX.F_ABI_INS_MST(v('APP_PAGE_ID'), 
+                                                                          :P_C_VAR, 
+                                                                          <STATIC ID REGION MASTER>);
+              
+              end;`;
+    case 'wnfi-pl':
+      return `cmsAbiInsert (<STATIC ID REGION MASTER>,$v('PXXX_ABI_INS_MASTER') );`;
+    case 'wnri':
+      return `TXXX.COL1||';'||To_Char(TXXX.COL2,'ddmmyyyy') ID_ROW_ABI,
+      KX003_ABI_UTL_APEX.F_GET_ABI(v('APP_PAGE_ID'),:P_C_VAR,'WNRI',TXXX.COL1||';'||To_Char(TXXX.COL2,'ddmmyyyy'), <STATIC ID REGION>,null,'UD') F_ABI_UD`;
+    case 'item':
+      return `-- da mettere in proprietà Apex Read-Only
+      KX003_ABI_UTL_APEX.F_ABI_ITM (v('APP_PAGE_ID'),:P_C_VAR,<STATIC ID REGION>,<NOME ITEM>,<PROPRIETA>,:ID_ROW_ABI ) = 'false'`;
+    case 'region':
+      return `-- da mettere in proprietà Apex Read-Only
+      KX003_ABI_UTL_APEX.F_ABI_REG (v('APP_PAGE_ID'),:P_C_VAR,<STATIC ID REGION>,<PROPRIETA>,:ID_ROW_ABI )`;
+    case 'config':
+      return `insert into TX006_TYP_ABI (page_id, c_reg, c_ctr, t_ctr, t_exe, f_chg_ses, n_min_cache) values (<ID PAGE>, <STATIC ID REGION>, 'WNRI', 'WhenNewRecordInstance', 'KXXX_ABI_XXXXX.P_WNRI_XXXX(@P_N_PAG_ID@,@P_C_VAR@,@P1_V@,@P2_D@,@P3_N@)', 'N', 60);`;
+    case 'debug':
+      return `DECLARE   
+                v_session_id VARCHAR2(100);
+              BEGIN    
+                APEX_UTIL.SET_SECURITY_GROUP_ID(p_security_group_id => APEX_UTIL.FIND_SECURITY_GROUP_ID('CMS'));
+
+                  APEX_CUSTOM_AUTH.LOGIN (
+                      p_uname       => 'proprio_utente',              
+                      p_session_id  => V('APP_SESSION'),
+                      p_app_page    => '123'||':1234'); -- APP ID + ':PAGE_ID'
+
+                /* INTERROGARE IL RISULTATO DELLE ABILITAZIONI NELLE TABELLE:
+                TX004_ABI_EXE
+                TX005_ABI
+                */
+              END ;
+              `;
+    default:
+      code = '';
   }
 }
 
@@ -233,6 +284,9 @@ export function generateCode() {
       break;
     case 'custom-message':
       code = generateCustomMessage();
+      break;
+    case 'abilitazioni':
+      code = generateAbilitazioni();
       break;
     default:
       code = '// Tab personalizzato: ' + tabId;
