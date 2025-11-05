@@ -207,11 +207,13 @@ function generateAbilitazioni() {
   switch (type) {
     case 'wnfi-bh':
       return `declare
-                  P1_OUT VARCHAR2(1000);
+                  P1_IN VARCHAR2(1000);
+                  P2_OUT VARCHAR2(1000);
               begin
                   KXXXX_ABI_XXXXX.P_WNFI_ABI ( v('APP_PAGE_ID'),
                                             :P_C_VAR,
-                                            P1_OUT ); -- parametro di output valorizzato nel WNFI
+                                            P1_IN,    -- eventuale parametri di input 
+                                            P2_OUT ); -- eventuale parametro di output 
               
                   :PXXX_ABI_INS_MASTER := KX003_ABI_UTL_APEX.F_ABI_INS_MST(v('APP_PAGE_ID'), 
                                                                           :P_C_VAR, 
@@ -219,15 +221,15 @@ function generateAbilitazioni() {
               
               end;`;
     case 'wnfi-pl':
-      return `cmsAbiInsert (<STATIC ID REGION MASTER>,$v('PXXX_ABI_INS_MASTER') );`;
+      return `let fAbiInsXXXX = $v("PXXX_ABI_INS_MASTER") == 'true' ? true : false;cmsAbiInsert (<STATIC ID REGION MASTER>,fAbiInsXXXX );`;
     case 'wnri':
       return `TXXX.COL1||';'||To_Char(TXXX.COL2,'ddmmyyyy') ID_ROW_ABI,
       KX003_ABI_UTL_APEX.F_GET_ABI(v('APP_PAGE_ID'),:P_C_VAR,'WNRI',TXXX.COL1||';'||To_Char(TXXX.COL2,'ddmmyyyy'), <STATIC ID REGION>,null,'UD') F_ABI_UD`;
     case 'item':
-      return `-- da mettere in proprietà Apex Read-Only
+      return `-- da mettere in proprietà Apex Read-Only dell'item che si vuole gestire
       KX003_ABI_UTL_APEX.F_ABI_ITM (v('APP_PAGE_ID'),:P_C_VAR,<STATIC ID REGION>,<NOME ITEM>,<PROPRIETA>,:ID_ROW_ABI ) = 'false'`;
     case 'region':
-      return `-- da mettere in proprietà Apex Read-Only
+      return `-- da mettere in proprietà Apex Read-Only dell'item che si vuole gestire
       KX003_ABI_UTL_APEX.F_ABI_REG (v('APP_PAGE_ID'),:P_C_VAR,<STATIC ID REGION>,<PROPRIETA>,:ID_ROW_ABI )`;
     case 'config':
       return `insert into TX006_TYP_ABI (page_id, c_reg, c_ctr, t_ctr, t_exe, f_chg_ses, n_min_cache) values (<ID PAGE>, <STATIC ID REGION>, 'WNRI', 'WhenNewRecordInstance', 'KXXX_ABI_XXXXX.P_WNRI_XXXX(@P_N_PAG_ID@,@P_C_VAR@,@P1_V@,@P2_D@,@P3_N@)', 'N', 60);`;
